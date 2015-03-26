@@ -45,4 +45,28 @@ angular.module('starter.controllers', [])
 })
 
 .controller('PlaylistCtrl', function($scope, $stateParams) {
-});
+})
+
+.controller('NoticiasCtrl', function($scope) {
+  $scope.noticias = [
+    { title: 'Reggae', id: 1 },
+    { title: 'Chill', id: 2 },
+    { title: 'Dubstep', id: 3 },
+    { title: 'Indie', id: 4 },
+    { title: 'Rap', id: 5 },
+    { title: 'Cowbell', id: 6 }
+  ];
+
+  $scope.doRefresh = function() {
+    //$http.get('/playlists')
+     //.success(function(playlists) {
+       //$scope.items = newItems;
+     //})
+     //.finally(function() {
+       // Stop the ion-refresher from spinning
+       $scope.$broadcast('scroll.refreshComplete');
+    //});
+  };
+
+})
+;
