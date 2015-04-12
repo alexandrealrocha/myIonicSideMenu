@@ -47,26 +47,48 @@ angular.module('starter.controllers', [])
 .controller('PlaylistCtrl', function($scope, $stateParams) {
 })
 
-.controller('NoticiasCtrl', function($scope) {
-  $scope.noticias = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
-  ];
+.controller('NoticiasCtrl', function($http, $scope) {
+
+  $scope.init = function() {
+    $http.jsonp("http://ajax.googleapis.com/ajax/services/feed/load?callback=JSON_CALLBACK", { params: { "v": "1.0", "num":"5", "q": "http://souconcurseiroevoupassar.blogspot.com/feeds/posts/default" } })
+    .success(function(data) {
+      $scope.rssTitle = data.responseData.feed.title;
+      $scope.rssUrl = data.responseData.feed.feedUrl;
+      $scope.rssSiteUrl = data.responseData.feed.link;
+      $scope.noticias = data.responseData.feed.entries;
+      window.localStorage["noticias"] = JSON.stringify(data.responseData.feed.entries);
+    })
+    .error(function(data) {
+      console.log("ERROR: " + data);
+      if(window.localStorage["noticias"] !== undefined) {
+        $scope.noticias = JSON.parse(window.localStorage["noticias"]);
+      }
+    });
+  }
 
   $scope.doRefresh = function() {
-    //$http.get('/playlists')
-     //.success(function(playlists) {
-       //$scope.items = newItems;
-     //})
-     //.finally(function() {
-       // Stop the ion-refresher from spinning
-       $scope.$broadcast('scroll.refreshComplete');
-    //});
+    $http.jsonp("http://ajax.googleapis.com/ajax/services/feed/load?callback=JSON_CALLBACK", { params: { "v": "1.0", "num":"15", "q": "http://souconcurseiroevoupassar.blogspot.com/feeds/posts/default" } })
+    .success(function(data) {
+      $scope.rssTitle = data.responseData.feed.title;
+      $scope.rssUrl = data.responseData.feed.feedUrl;
+      $scope.rssSiteUrl = data.responseData.feed.link;
+      $scope.noticias = data.responseData.feed.entries;
+      window.localStorage["noticias"] = JSON.stringify(data.responseData.feed.entries);
+    })
+    .error(function(data) {
+      console.log("ERROR: " + data);
+      if(window.localStorage["noticias"] !== undefined) {
+        $scope.noticias = JSON.parse(window.localStorage["noticias"]);
+      }
+    })
+    .finally(function() {
+      // Stop the ion-refresher from spinning
+      $scope.$broadcast('scroll.refreshComplete');
+    });
   };
 
+})
+.controller('NoticiaCtrl', function($scope, $stateParams) {
+  $scope.noticiaId = $stateParams.noticiaId;
 })
 ;

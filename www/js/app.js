@@ -20,8 +20,38 @@ angular.module('starter', ['ionic', 'starter.controllers'])
   });
 })
 
+.service('NoticiasService', function($q) {
+  return {
+    noticias: [
+      {
+        id: '1',
+        title: 'Pick up apples',
+        done: false
+      },
+      {
+        id: '2',
+        title: 'Mow the lawn',
+        done: true
+      }
+    ],
+    getNoticias: function() {
+      return this.noticias
+    },
+    getNoticia: function(noticiaId) {
+      var dfd = $q.defer()
+      this.noticias.forEach(function(noticia) {
+        if (noticia.id === noticiaId) dfd.resolve(noticia)
+      })
+
+      return dfd.promise
+    }
+
+  }
+})
+
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
+
 
   .state('app', {
     url: "/app",
@@ -56,6 +86,17 @@ angular.module('starter', ['ionic', 'starter.controllers'])
         }
       }
     })
+
+    .state('app.single', {
+      url: "/playlists/:playlistId",
+      views: {
+        'menuContent': {
+          templateUrl: "templates/playlist.html",
+          controller: 'PlaylistCtrl'
+        }
+      }
+    })
+
     .state('app.noticias', {
       url: "/noticias",
       views: {
@@ -66,17 +107,38 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       }
     })
 
-
-
-  .state('app.single', {
-    url: "/playlists/:playlistId",
-    views: {
-      'menuContent': {
-        templateUrl: "templates/playlist.html",
-        controller: 'PlaylistCtrl'
+    .state('app.singleNoticia', {
+      url: "/noticias/:noticiaId",
+      views: {
+        'menuContent': {
+          templateUrl: "templates/noticia.html",
+          controller: 'NoticiaCtrl'
+        }
       }
-    }
-  });
+    })
+
+    // .state('app.noticias', {
+    //     url: '/noticias',
+    //     controller: 'NoticiasCtrl',
+    //     templateUrl: 'templates/noticias.html',
+    //     resolve: {
+    //       noticias: function(NoticiasService) {
+    //         return NoticiasService.getNoticias()
+    //       }
+    //     }
+    //   })
+    //   .state('app.singleNoticia', {
+    //     url: '/noticias/:noticiaId',
+    //     controller: 'NoticiaCtrl',
+    //     templateUrl: 'templates/noticia.html',
+    //     resolve: {
+    //       noticia: function($stateParams, NoticiasService) {
+    //         return NoticiasService.getNoticia($stateParams.noticiaId)
+    //       }
+    //     }
+    //   })
+
+;
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/playlists');
+  $urlRouterProvider.otherwise('/app/noticias');
 });
