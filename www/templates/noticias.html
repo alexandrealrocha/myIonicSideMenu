@@ -1,11 +1,12 @@
 <ion-view view-title="Notícias em Destaque">
-  <ion-content ng-init="init()">
+  <ion-content >
+    <!-- ng-init="init()" -->
     <ion-refresher
     pulling-text="Pull to refresh..."
     on-refresh="doRefresh()">
     </ion-refresher>
     <ion-list>
-      <ion-item ng-repeat="noticia in noticias" ng-href="#/app/noticias/{{noticia.title}}">
+      <ion-item ng-repeat="noticia in noticias" ng-href="#/app/noticias/{{noticia.id}}">
         {{noticia.title}}<br/>
       </ion-item>
     </ion-list>

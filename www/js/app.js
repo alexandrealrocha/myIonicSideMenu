@@ -20,7 +20,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
   });
 })
 
-.service('NoticiasService', function($q) {
+.service('NoticiasService', function($q, $http) {
   return {
     noticias: [
       {
@@ -35,6 +35,21 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       }
     ],
     getNoticias: function() {
+      var obj = this;
+      // $http.jsonp("http://ajax.googleapis.com/ajax/services/feed/load?callback=JSON_CALLBACK", { params: { "v": "1.0", "num":"5", "q": "http://souconcurseiroevoupassar.blogspot.com/feeds/posts/default" } })
+      // .success(function(data) {
+      //   obj.rssTitle = data.responseData.feed.title;
+      //   obj.rssUrl = data.responseData.feed.feedUrl;
+      //   obj.rssSiteUrl = data.responseData.feed.link;
+      //   obj.noticias = data.responseData.feed.entries;
+      //   window.localStorage["noticias"] = JSON.stringify(data.responseData.feed.entries);
+      // })
+      // .error(function(data) {
+      //   console.log("ERROR: " + data);
+      //   if(window.localStorage["noticias"] !== undefined) {
+      //     obj.noticias = JSON.parse(window.localStorage["noticias"]);
+      //   }
+      // });
       return this.noticias
     },
     getNoticia: function(noticiaId) {
@@ -104,6 +119,12 @@ angular.module('starter', ['ionic', 'starter.controllers'])
           templateUrl: "templates/noticias.html",
           controller: 'NoticiasCtrl'
         }
+      },
+      resolve: {
+        noticias: function(NoticiasService) {
+          console.log(NoticiasService.getNoticias());
+          return NoticiasService.getNoticias()
+        }
       }
     })
 
@@ -114,29 +135,13 @@ angular.module('starter', ['ionic', 'starter.controllers'])
           templateUrl: "templates/noticia.html",
           controller: 'NoticiaCtrl'
         }
+      },
+      resolve: {
+        noticia: function($stateParams, NoticiasService) {
+          return NoticiasService.getNoticia($stateParams.noticiaId)
+        }
       }
     })
-
-    // .state('app.noticias', {
-    //     url: '/noticias',
-    //     controller: 'NoticiasCtrl',
-    //     templateUrl: 'templates/noticias.html',
-    //     resolve: {
-    //       noticias: function(NoticiasService) {
-    //         return NoticiasService.getNoticias()
-    //       }
-    //     }
-    //   })
-    //   .state('app.singleNoticia', {
-    //     url: '/noticias/:noticiaId',
-    //     controller: 'NoticiaCtrl',
-    //     templateUrl: 'templates/noticia.html',
-    //     resolve: {
-    //       noticia: function($stateParams, NoticiasService) {
-    //         return NoticiasService.getNoticia($stateParams.noticiaId)
-    //       }
-    //     }
-    //   })
 
 ;
   // if none of the above states are matched, use this as the fallback
