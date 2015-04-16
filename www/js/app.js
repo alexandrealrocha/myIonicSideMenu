@@ -22,45 +22,27 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 
 .service('NoticiasService', function($q, $http) {
   return {
-    noticias: [
-      {
-        id: '1',
-        title: 'Pick up apples',
-        done: false
-      },
-      {
-        id: '2',
-        title: 'Mow the lawn',
-        done: true
-      }
-    ],
+    noticias: [],
     getNoticias: function() {
       var obj = this;
-      // $http.jsonp("http://ajax.googleapis.com/ajax/services/feed/load?callback=JSON_CALLBACK", { params: { "v": "1.0", "num":"5", "q": "http://souconcurseiroevoupassar.blogspot.com/feeds/posts/default" } })
-      // .success(function(data) {
-      //   obj.rssTitle = data.responseData.feed.title;
-      //   obj.rssUrl = data.responseData.feed.feedUrl;
-      //   obj.rssSiteUrl = data.responseData.feed.link;
-      //   obj.noticias = data.responseData.feed.entries;
-      //   window.localStorage["noticias"] = JSON.stringify(data.responseData.feed.entries);
-      // })
-      // .error(function(data) {
-      //   console.log("ERROR: " + data);
-      //   if(window.localStorage["noticias"] !== undefined) {
-      //     obj.noticias = JSON.parse(window.localStorage["noticias"]);
-      //   }
-      // });
-      return this.noticias
+      return $http.jsonp("http://ajax.googleapis.com/ajax/services/feed/load?callback=JSON_CALLBACK", { params: { "v": "1.0", "num":"5", "q": "http://souconcurseiroevoupassar.blogspot.com/feeds/posts/default" } })
+       .then(function(response) {
+         data = response.data;
+         obj.rssTitle = data.responseData.feed.title;
+         obj.rssUrl = data.responseData.feed.feedUrl;
+         obj.rssSiteUrl = data.responseData.feed.link;
+         obj.noticias = data.responseData.feed.entries;
+         window.localStorage["noticias"] = JSON.stringify(data.responseData.feed.entries);
+         return obj.noticias; 
+      });
     },
-    getNoticia: function(noticiaId) {
+    getNoticia: function(noticiaTitle) {
       var dfd = $q.defer()
       this.noticias.forEach(function(noticia) {
-        if (noticia.id === noticiaId) dfd.resolve(noticia)
+        if (noticia.title === noticiaTitle) dfd.resolve(noticia)
       })
-
       return dfd.promise
     }
-
   }
 })
 
@@ -122,14 +104,13 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       },
       resolve: {
         noticias: function(NoticiasService) {
-          console.log(NoticiasService.getNoticias());
-          return NoticiasService.getNoticias()
+            return NoticiasService.getNoticias()
         }
       }
     })
 
     .state('app.singleNoticia', {
-      url: "/noticias/:noticiaId",
+      url: "/noticias/:noticiaTitle",
       views: {
         'menuContent': {
           templateUrl: "templates/noticia.html",
@@ -138,7 +119,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       },
       resolve: {
         noticia: function($stateParams, NoticiasService) {
-          return NoticiasService.getNoticia($stateParams.noticiaId)
+          return NoticiasService.getNoticia($stateParams.noticiaTitle)
         }
       }
     })
