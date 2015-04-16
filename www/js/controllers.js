@@ -48,29 +48,28 @@ angular.module('starter.controllers', [])
 })
 
 .controller('NoticiasCtrl', function($http, $scope, noticias) {
- 
-    $scope.noticias = noticias;
-    
-    // $scope.doRefresh = function() {
-    //   $http.jsonp("http://ajax.googleapis.com/ajax/services/feed/load?callback=JSON_CALLBACK", { params: { "v": "1.0", "num":"15", "q": "http://souconcurseiroevoupassar.blogspot.com/feeds/posts/default" } })
-    //   .success(function(data) {
-    //     $scope.rssTitle = data.responseData.feed.title;
-    //     $scope.rssUrl = data.responseData.feed.feedUrl;
-    //     $scope.rssSiteUrl = data.responseData.feed.link;
-    //     $scope.noticias = data.responseData.feed.entries;
-    //     window.localStorage["noticias"] = JSON.stringify(data.responseData.feed.entries);
-    //   })
-    //   .error(function(data) {
-    //     console.log("ERROR: " + data);
-    //     if(window.localStorage["noticias"] !== undefined) {
-    //       $scope.noticias = JSON.parse(window.localStorage["noticias"]);
-    //     }
-    //   })
-    //   .finally(function() {
-    //     // Stop the ion-refresher from spinning
-    //     $scope.$broadcast('scroll.refreshComplete');
-    //   });
-    // };
+  $scope.noticias = noticias;
+  //
+  // $scope.doRefresh = function() {
+  //   $http.jsonp("http://ajax.googleapis.com/ajax/services/feed/load?callback=JSON_CALLBACK", { params: { "v": "1.0", "num":"15", "q": "http://souconcurseiroevoupassar.blogspot.com/feeds/posts/default" } })
+  //   .success(function(data) {
+  //     $scope.rssTitle = data.responseData.feed.title;
+  //     $scope.rssUrl = data.responseData.feed.feedUrl;
+  //     $scope.rssSiteUrl = data.responseData.feed.link;
+  //     $scope.noticias = data.responseData.feed.entries;
+  //     window.localStorage["noticias"] = JSON.stringify(data.responseData.feed.entries);
+  //   })
+  //   .error(function(data) {
+  //     console.log("ERROR: " + data);
+  //     if(window.localStorage["noticias"] !== undefined) {
+  //       $scope.noticias = JSON.parse(window.localStorage["noticias"]);
+  //     }
+  //   })
+  //   .finally(function() {
+  //     // Stop the ion-refresher from spinning
+  //     $scope.$broadcast('scroll.refreshComplete');
+  //   });
+  // };
 
 })
 .controller('NoticiaCtrl', function($scope, $stateParams, noticia) {
