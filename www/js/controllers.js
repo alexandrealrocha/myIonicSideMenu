@@ -33,24 +33,41 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('PlaylistsCtrl', function($scope) {
-  $scope.playlists = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
-  ];
-})
+// .controller('PlaylistsCtrl', function($scope) {
+//   $scope.playlists = [
+//     { title: 'Reggae', id: 1 },
+//     { title: 'Chill', id: 2 },
+//     { title: 'Dubstep', id: 3 },
+//     { title: 'Indie', id: 4 },
+//     { title: 'Rap', id: 5 },
+//     { title: 'Cowbell', id: 6 }
+//   ];
+// })
+
+.controller('PlaylistsCtrl', ['$scope', 'googleService',
+    function($scope, googleService) {
+        $scope.channel = {};
+        $scope.getChannel = function () {
+            console.log("getChannel");
+            googleService.handleClientLoad().then(function (data) {
+            $scope.channel= data;
+            console.log($scope.channel);
+            }, function (error) {
+                console.log('Failed: ' + error)
+            });
+        };
+        $scope.getChannel();
+    }
+])
+
 
 .controller('PlaylistCtrl', function($scope, $stateParams) {
 })
 
 .controller('NoticiasCtrl', function($http, $scope, noticias) {
- 
+
     $scope.noticias = noticias;
-    
+
     // $scope.doRefresh = function() {
     //   $http.jsonp("http://ajax.googleapis.com/ajax/services/feed/load?callback=JSON_CALLBACK", { params: { "v": "1.0", "num":"15", "q": "http://souconcurseiroevoupassar.blogspot.com/feeds/posts/default" } })
     //   .success(function(data) {

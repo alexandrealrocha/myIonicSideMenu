@@ -1,5 +1,5 @@
 <ion-view view-title="{{noticia.title}}">
   <ion-content class="padding">
-    {{noticia.id}} / {{noticia.title}}
+    <span ng-bind-html="noticia.content"></span>
   </ion-content>
 </ion-view>

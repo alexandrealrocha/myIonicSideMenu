@@ -33,7 +33,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
          obj.rssSiteUrl = data.responseData.feed.link;
          obj.noticias = data.responseData.feed.entries;
          window.localStorage["noticias"] = JSON.stringify(data.responseData.feed.entries);
-         return obj.noticias; 
+         return obj.noticias;
       });
     },
     getNoticia: function(noticiaTitle) {
@@ -45,6 +45,41 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     }
   }
 })
+
+.service('googleService', ['$http', '$rootScope', '$q', function ($http, $rootScope, $q) {
+
+var APIKEY = "AIzaSyD89KkB1BVz-wdLYOLXNVBewR4oSbWQqro";
+
+var deferred = $q.defer();
+// Upon loading, the Google APIs JS client automatically invokes this callback.
+this.handleClientLoad = function () {
+    gapi.client.setApiKey(APIKEY);
+    console.log("Logado");
+    gapi.auth.init(function() {
+        window.setTimeout(this.loadAPIClientInterfaces, 1);
+    });
+};
+
+this.loadAPIClientInterfaces = function () {
+    console.log("loadAPIClientInterfaces");
+    gapi.client.load('youtube', 'v3', function() {
+        console.log("youtube loaded");
+        request = gapi.client.youtube.search.list({
+            part: 'id, snippet',
+            channelId: 'UCqhNRDQE_fqBDBwsvmT8cTg',
+            order: 'date',
+            type: 'video'
+        });
+        console.log("youtube request:");
+        console.log(request);
+
+        request.execute(function(response) {
+            deferred.resolve(data);
+        });
+    });
+    return deferred.promise;
+};
+}])
 
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
