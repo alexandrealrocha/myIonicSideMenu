@@ -47,13 +47,12 @@ angular.module('starter.controllers', [])
 .controller('PlaylistsCtrl', ['$scope', 'googleService',
     function($scope, googleService) {
         $scope.channel = {};
+        $scope.playlists = [];
         $scope.getChannel = function () {
-            console.log("getChannel");
-            googleService.handleClientLoad().then(function (data) {
-            $scope.channel= data;
-            console.log($scope.channel);
-            }, function (error) {
-                console.log('Failed: ' + error)
+            googleService.handleClientLoad(function(data){
+              $scope.channel = data;
+              $scope.playlists = $scope.channel.items;
+              $scope.$apply(); //refresh the scope
             });
         };
         $scope.getChannel();
