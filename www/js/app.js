@@ -48,37 +48,34 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 
 .service('googleService', ['$http', '$rootScope', '$q', function ($http, $rootScope, $q) {
 
-var APIKEY = "AIzaSyD89KkB1BVz-wdLYOLXNVBewR4oSbWQqro";
+  var APIKEY = "AIzaSyD89KkB1BVz-wdLYOLXNVBewR4oSbWQqro";
+  var deferred = $q.defer();
+  var myService = this;
 
-var deferred = $q.defer();
-// Upon loading, the Google APIs JS client automatically invokes this callback.
-this.handleClientLoad = function () {
-    gapi.client.setApiKey(APIKEY);
-    console.log("Logado");
-    gapi.auth.init(function() {
-        window.setTimeout(this.loadAPIClientInterfaces, 1);
-    });
-};
+  this.handleClientLoad = function (callback) {
+      gapi.client.setApiKey(APIKEY);
+      gapi.auth.init(function() {
+          window.setTimeout(function(){
+              myService.loadAPIClientInterfaces(callback);
+          }, 1);
+      });
+  };
 
-this.loadAPIClientInterfaces = function () {
-    console.log("loadAPIClientInterfaces");
-    gapi.client.load('youtube', 'v3', function() {
-        console.log("youtube loaded");
-        request = gapi.client.youtube.search.list({
-            part: 'id, snippet',
-            channelId: 'UCqhNRDQE_fqBDBwsvmT8cTg',
-            order: 'date',
-            type: 'video'
-        });
-        console.log("youtube request:");
-        console.log(request);
-
-        request.execute(function(response) {
-            deferred.resolve(data);
-        });
-    });
-    return deferred.promise;
-};
+  this.loadAPIClientInterfaces = function (callback) {
+      console.log("loadAPIClientInterfaces");
+      gapi.client.load('youtube', 'v3', function() {
+          console.log("youtube loaded");
+          request = gapi.client.youtube.search.list({
+              part: 'id, snippet',
+              channelId: 'UCqhNRDQE_fqBDBwsvmT8cTg',
+              order: 'date',
+              type: 'video'
+          });
+          request.then(function(data) {
+              callback(data.result);
+          });
+      });
+  };
 }])
 
 .config(function($stateProvider, $urlRouterProvider) {
